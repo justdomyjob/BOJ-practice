@@ -15,9 +15,9 @@ def get_tree(a):
             sum+=(tree-a)
     return sum
 while left+1 < right:
-    if get_tree(mid) >= tree_meter:
-        left = mid
-    else:
+    if get_tree(mid) < tree_meter:
         right = mid
+    else:
+        left = mid
     mid = (left+right)//2
 print(mid)
