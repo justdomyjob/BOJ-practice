@@ -13,17 +13,12 @@ def recur(a,b,c):
         return dp[(a,b,c)]
 
     elif a < b and b < c:
-        dp[(a,b,c-1)] = recur(a,b,c-1)
-        dp[(a,b-1,c-1)] = recur(a,b-1,c-1)
-        dp[(a,b-1,c)] = recur(a,b-1,c)
-        return dp[(a,b,c-1)]+dp[(a,b-1,c-1)]-dp[(a,b-1,c)]
+        dp[(a,b,c)] = recur(a,b,c-1) + recur(a,b-1,c-1) - recur(a,b-1,c)
+        return dp[(a,b,c)]
 
     else:
-        dp[(a-1,b,c)] = recur(a-1, b, c)
-        dp[(a-1,b-1,c)] = recur(a-1, b-1, c)
-        dp[(a-1,b,c-1)] = recur(a-1, b, c-1)
-        dp[(a-1,b-1,c-1)] = recur(a-1, b-1, c-1)
-        return dp[(a-1,b,c)] + dp[(a-1,b-1,c)] + dp[(a-1,b,c-1)] - dp[(a-1,b-1,c-1)]
+        dp[(a,b,c)] = recur(a-1, b, c) + recur(a-1, b-1, c) + recur(a-1, b, c-1) - recur(a-1, b-1, c-1)
+        return  dp[(a,b,c)]
     
 while True:
     a,b,c = map(int,input().split())
