@@ -1,23 +1,29 @@
 import sys
-n = int(sys.stdin.readline().rstrip())
-sys.setrecursionlimit(10**5)
-count = 0
-queens = []
 
+n = int(input())
+
+sys.setrecursionlimit(10**5)
+
+count = 0
+chess=[]
 def dfs():
     global count
-    if len(queens)==n:
-        count+=1
-    for j in range(n):
-        if j not in queens and can(j):
-            queens.append(j)
+    y = len(chess)
+    if y == n:
+        count += 1
+    for x in range(n):
+        if x not in chess and avail(x,y):
+            chess.append(x)
             dfs()
-            queens.pop()
-def can(y):
-    x = len(queens)
-    for x1,y1 in enumerate(queens):
+            chess.pop()
+
+def avail(x,y):
+    if y == 0 :
+        return True
+    for y1,x1 in enumerate(chess):
         if abs(x1-x) == abs(y1-y):
             return False
-    return True 
+    return True
+
 dfs()
 print(count)
