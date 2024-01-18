@@ -1,43 +1,42 @@
 import sys
 
 N = int(input())
-numbers =  list(map(int,sys.stdin.readline().rstrip().split()))
-operaters = list(map(int,sys.stdin.readline().rstrip().split())) #+ - x //
+numbers = list(map(int,sys.stdin.readline().rstrip().split()))
+operators = list(map(int,sys.stdin.readline().rstrip().split()))
 
-MAX_NUMBER = 10**9
-MIN_NUMBER = -10**9
-max_temp = MIN_NUMBER
-min_temp = MAX_NUMBER
-temp = numbers[0]
+MAX = -10**9
+MIN = -MAX
 
-def operate(n,operation,m):
-    if operation==0:
-        return n+m
-    elif operation==1:
-        return n-m
-    elif operation==2:
-        return n*m
-    elif operation==3:
-        if n>=0:
-            return n//m
-        else :
-            return -((-n)//m)
-        
+value = numbers[0]
 def dfs(n):
-    global temp
-    global max_temp
-    global min_temp
-    if n==N-1:
-        max_temp = max(max_temp,temp)
-        min_temp = min(min_temp,temp)
-    for operation in range(4):
-        if operaters[operation]>0:
-            before_temp = temp
-            temp=operate(temp,operation,numbers[n+1])
-            operaters[operation]-=1
+    global value, MAX, MIN
+    if n == N:
+        if value > MAX:
+            MAX = value
+        if value < MIN:
+            MIN = value
+    for i in range(4):
+        if operators[i] > 0:
+            temp = value
+            operators[i] -= 1
+            operation(i,n)
             dfs(n+1)
-            operaters[operation]+=1
-            temp = before_temp
-dfs(0)
-print(max_temp)
-print(min_temp)
+            operators[i] += 1
+            value = temp
+
+def operation(i,n):
+    global value
+    if i == 0:
+        value += numbers[n]
+    elif i == 1:
+        value -= numbers[n]
+    elif i == 2:
+        value *= numbers[n]
+    elif i == 3:
+        if value > 0 :
+            value = value // numbers[n]
+        else :
+            value = -((-value) // numbers[n])
+dfs(1)
+print(MAX)
+print(MIN)
