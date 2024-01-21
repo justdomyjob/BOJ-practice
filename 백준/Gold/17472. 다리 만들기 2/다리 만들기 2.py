@@ -54,11 +54,8 @@ def distance(land1, land2):  # 2이상
                     length = abs(j1 - j2) - 1
                     if limeMIN > length and length >=2:
                         limeMIN = length
-        if limeMIN < 2:
-            continue
-        else:
-            if limeMIN < MIN:
-                MIN = limeMIN
+        if limeMIN < MIN:
+            MIN = limeMIN
     for j in range(m):
         limeMIN = INF
         for i1, j1 in land1:
@@ -76,11 +73,8 @@ def distance(land1, land2):  # 2이상
                     length = abs(i1 - i2) - 1
                     if limeMIN > length and length >=2:
                         limeMIN = length
-        if limeMIN < 2:
-            continue
-        else:
-            if limeMIN < MIN:
-                MIN = limeMIN
+        if limeMIN < MIN:
+            MIN = limeMIN
     return MIN
 
 edges = []
