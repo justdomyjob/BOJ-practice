@@ -50,5 +50,4 @@ for edge in edges:
     if find(parent,a)!= find(parent,b):
         ret+=c
         union(parent,a,b)
-ret = round(ret,2)
 print(f'{ret:.2f}')
