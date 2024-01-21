@@ -10,9 +10,7 @@ for _ in range(test):
         for t in rank[i+1:]:
             graph[rank[i]][t] = 1
 
-    change_count = int(sys.stdin.readline().rstrip())
-    change_edge= []
-    for _ in range(change_count):
+    for _ in range(int(sys.stdin.readline().rstrip())):
         a,b = map(int,sys.stdin.readline().rstrip().split())
         if graph[a][b]==1:
             graph[a][b] = 0
@@ -20,39 +18,42 @@ for _ in range(test):
         else:
             graph[a][b] = 1
             graph[b][a] = 0
-
-    indegree = [[graph[x][i] for x in range(1,n+1)] for i in range(1,n+1)]
-
-    q = deque()
-    for i in range(n):
-        if sum(indegree[i])==0:
-            q.append(i)
-    if len(q)>=2:
+    edge=[[] for _ in range(n+1)]
+    count = [0] * (n+1)
+    for i in range(1,n+1):
+        for j in range(1,n+1):
+            if graph[i][j] == 1:
+                edge[i].append(j)
+                count[j]+=1
+            
+    q1 = deque()
+    q2 = deque()
+    for i in range(1,n+1):
+        if count[i]==0:
+            q1.append(i)
+    if len(q1)>=2:
         print("?")
         continue
-    if len(q)==0:
+    if len(q1)==0:
         print("IMPOSSIBLE")
         continue
-    result = deque()
     can_decide = True
-    while q:
-        node = q.pop()
-        result.append(node)
-        for i in range(n):
-            indegree[i][node] = 0
-            if sum(indegree[i]) == 0 and i not in result:
-                q.append(i)
-        if len(q)>=2:
-            can_decide = False
+    while q1:
+        node = q1.popleft()
+        q2.append(node)
+        for u in edge[node]:
+            count[u]-=1
+            if count[u]==0:
+                q1.append(u)
+        if len(q1)>=2:
+            can_decide=False
             break
     if can_decide==False:
         print("?")
         continue
-    if len(result)!=n:
+    if len(q2)!=n:
         print("IMPOSSIBLE")
         continue
-    while result:
-        print(result.popleft()+1,end=" ")
+    while q2:
+        print(q2.popleft(), end=" ")
     print()
-
-        
