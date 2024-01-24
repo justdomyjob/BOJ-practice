@@ -4,12 +4,9 @@ v = int(input())
 edges = [[] for _ in range(v+1)]
 visited = [0 for _ in range(v+1)]
 distance = [0 for _ in range(v+1)]
-start = 0
 MIN = 10 ** 9
 for i in range(1,v+1):
     a = list(map(int,sys.stdin.readline().rstrip().split()))
-    if len(a)==4:
-        start = i
     for j in range(len(a)//2-1):
         edges[a[0]].append((a[2*j+1],a[2*j+2]))
 
@@ -31,10 +28,7 @@ def dfs(v, root_length): #return end 길이
     else:
         root_end_length = root_length + end_length_list[0]
         end_end_length = end_length_list[0] + end_length_list[1]
-        if end_end_length < root_end_length:
-            distance[v] = root_end_length
-        else:
-            distance[v] = end_end_length
+        distance[v] = max(end_end_length,root_end_length)
     return default
-dfs(start,0)
+dfs(1,0)
 print(max(distance))
