@@ -15,32 +15,20 @@ count = 0
 steps = [(1,0),(-1,0), (0,1), (0,-1)]
 
 def go_next(): #메인
-    next_list = get_next_list()
-    next_list.sort()
-    for distance, next_r, next_c in next_list:
-        if distance==-1:
-            continue
-        else:
-            go_and_eat(next_r, next_c, distance)
-            return
-    print(count)
-    exit(0)
-
-def get_fishes():
-    fishes = [[] for _ in range(7)]
+    visited = [[-1 for _ in range(n)] for _ in range(n)]
+    bfs(r,c,visited,0)
+    next_list = []
     for i in range(n):
         for j in range(n):
-            if graph[i][j] in [1, 2, 3, 4, 5, 6]:
-                fishes[graph[i][j]].append((i, j))
-    return fishes
-
-def get_next_list():
-    next_list = []
-    fishes = get_fishes()
-    for i in range(1, min(size,7)):
-        for r1,c1 in fishes[i]:
-            next_list.append((get_distance(r1, c1), r1,c1))
-    return next_list
+            if visited[i][j] not in [-1,0] and 0<graph[i][j]<size:
+                next_list.append((visited[i][j],i,j))
+    next_list.sort()
+    if next_list:
+        distance, next_r, next_c = next_list[0]
+        go_and_eat(next_r, next_c, distance)
+        return
+    print(count)
+    exit(0)
 
 def go_and_eat(next_r,next_c,distance):
     global eat,size,r,c,count
@@ -52,11 +40,6 @@ def go_and_eat(next_r,next_c,distance):
     if eat==size:
         eat=0
         size+=1
-
-def get_distance(next_r, next_c):
-    visited = [[-1 for _ in range(n)] for _ in range(n)]
-    bfs(r,c,visited,0)
-    return visited[next_r][next_c]
 
 def e(r1,c1):
     ret = []
