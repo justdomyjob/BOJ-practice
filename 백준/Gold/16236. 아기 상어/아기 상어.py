@@ -9,21 +9,15 @@ for i in range(n):
     for j in range(n):
         if graph[i][j] == 9:
             r, c = i, j
-
 size = 2
 eat = 0
 count = 0
-#r,c
 steps = [(1,0),(-1,0), (0,1), (0,-1)]
-
-
 
 def go_next(): #메인
     next_list = get_next_list()
-    next_list.sort(key = lambda x:(get_distance(x[0], x[1]), x[0], x[1]))
-    # 위에까지가 get next_list
-    for next_r, next_c in next_list:
-        distance = get_distance(next_r, next_c)
+    next_list.sort()
+    for distance, next_r, next_c in next_list:
         if distance==-1:
             continue
         else:
@@ -44,8 +38,8 @@ def get_next_list():
     next_list = []
     fishes = get_fishes()
     for i in range(1, min(size,7)):
-        for fish in fishes[i]:
-            next_list.append(fish)
+        for r1,c1 in fishes[i]:
+            next_list.append((get_distance(r1, c1), r1,c1))
     return next_list
 
 def go_and_eat(next_r,next_c,distance):
