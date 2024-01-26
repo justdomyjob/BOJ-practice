@@ -15,9 +15,6 @@ class Dice:
         self.south = south
         self.east = east
         self.west = west
-    def __str__(self):
-        return (f"up :{self.up} bottom :{self.bottom} north :{self.north} "
-              f"south :{self.south} east :{self.east} west :{self.west} ")
 
 def dice_east(dice):
     temp = dice.west
