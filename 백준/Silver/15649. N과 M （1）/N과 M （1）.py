@@ -1,12 +1,18 @@
+import copy
+
+
+try : standard_input = open("input.txt", "r")  
+except:pass
+
 N, M = map(int,input().split())
 
-s=[0] * M
-def all(n):
-    if n == M:
+s=[]
+def dfs():
+    if len(s) == M:
         print(' '.join(map(str,s)))
-        return
     for i in range(1,N+1):
-        s[n] = i
-        if i not in s[:n]:
-            all(n+1)
-all(0)
+        if i not in s:
+            s.append(i)
+            dfs()
+            s.pop()
+dfs()
