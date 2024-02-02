@@ -1,113 +1,110 @@
-import copy
+import sys, copy
+N = int(input())
+pan = []
+ans = 0
 
+for _ in range(N):
+    pan.append([int(x) for x in sys.stdin.readline().rstrip().split()])
 
-def left():
-    for i in range(n):
-        left_row(i)
-    return
+def left(board):
+    for i in range(N):
+        cursor = 0
+        for j in range(1, N):
+            if board[i][j] != 0: # 0이 아닌 값이
+                tmp = board[i][j]
+                board[i][j] = 0 # 일단 비워질꺼니까 0으로 바꿈
 
-def left_row(r):
-    global graph
-    insert = 0
-    temp =0
-    for i in range(n):
-        if graph[r][i] != 0 and graph[r][i] == temp:
-            graph[r][insert - 1] = 2 * graph[r][i]
-            temp = 0
-        elif graph[r][i] != 0 and graph[r][i] != temp:
-            temp = graph[r][i]
-            graph[r][insert] = graph[r][i]
-            insert += 1
-        elif graph[r][i] == 0:
-            continue
-    for i in range(insert, n):
-        graph[r][i] = 0
+                if board[i][cursor] == 0: # 비어있으면
+                    board[i][cursor] = tmp # 옮긴다
 
-def right():
-    for i in range(n):
-        right_row(i)
-    return
+                elif board[i][cursor] == tmp: # 같으면
+                    board[i][cursor] *= 2 # 합친다
+                    cursor += 1
+                else: # 비어있지도 않고 다른 값일때
+                    cursor += 1 # pass
+                    board[i][cursor] = tmp # 바로 옆에 붙임
 
-def right_row(r):
-    global graph
-    insert = n-1
-    temp =0
-    for i in range(n-1,-1,-1):
-        if graph[r][i] != 0 and graph[r][i] == temp:
-            graph[r][insert + 1] = 2 * graph[r][i]
-            temp = 0
-        elif graph[r][i] != 0 and graph[r][i] != temp:
-            temp = graph[r][i]
-            graph[r][insert] = graph[r][i]
-            insert -= 1
-        elif graph[r][i] == 0:
-            continue
-    for i in range(insert, -1,-1):
-        graph[r][i] = 0
+    return board
 
-def up():
-    for i in range(n):
-        up_column(i)
-    return
+def right(board):
+    for i in range(N):
+        cursor = N - 1
+        for j in range(N - 1, -1, -1):
 
-def up_column(c):
-    global graph
-    insert = 0
-    temp =0
-    for i in range(n):
-        if graph[i][c] != 0 and graph[i][c] == temp:
-            graph[insert - 1][c] = 2 * graph[i][c]
-            temp = 0
-        elif graph[i][c] != 0 and graph[i][c] != temp:
-            temp = graph[i][c]
-            graph[insert][c] = graph[i][c]
-            insert += 1
-        elif graph[i][c] == 0:
-            continue
-    for i in range(insert, n):
-        graph[i][c] = 0
+            if board[i][j] != 0:
+                tmp = board[i][j]
+                board[i][j] = 0
 
-def down(): #graph row r줄 이거나 row c줄에서 i,j 이동
-    for i in range(n):
-        down_colum(i)
-    return
+                if board[i][cursor] == 0:
+                    board[i][cursor] = tmp
 
-def down_colum(c):
-    global graph
-    insert = n-1
-    temp =0
-    for i in range(n-1,-1,-1):
-        if graph[i][c] != 0 and graph[i][c] == temp:
-            graph[insert + 1][c] = 2 * graph[i][c]
-            temp = 0
-        elif graph[i][c] != 0 and graph[i][c] != temp:
-            temp = graph[i][c]
-            graph[insert][c] = graph[i][c]
-            insert -= 1
-        elif graph[i][c] == 0:
-            continue
-    for i in range(insert, -1,-1):
-        graph[i][c] = 0
+                elif board[i][cursor] == tmp:
+                    board[i][cursor] *= 2
+                    cursor -= 1
+                else:
+                    cursor -= 1
+                    board[i][cursor] = tmp
+    return board
 
-n = int(input())
-graph = [list(map(int,input().split())) for _ in range(n)]
+def up(board):
+    for j in range(N):
+        cursor = 0
+        for i in range(N):
+            if board[i][j] != 0:
+                tmp = board[i][j]
+                board[i][j] = 0
 
-MAX = 0
-directions = [left,right,up,down]
+                if board[cursor][j] == 0:
+                    board[cursor][j] = tmp
 
-def dfs(n):
-    global MAX,graph
+                elif board[cursor][j] == tmp:
+                    board[cursor][j] *= 2
+                    cursor += 1
+
+                else:
+                    cursor += 1
+                    board[cursor][j] = tmp
+    return board
+
+def down(board):
+    for j in range(N):
+        cursor = N - 1
+        for i in range(N - 1, -1, -1):
+            if board[i][j] != 0:
+                tmp = board[i][j]
+                board[i][j] = 0
+
+                if board[cursor][j] == 0:
+                    board[cursor][j] = tmp
+
+                elif board[cursor][j] == tmp:
+                    board[cursor][j] *= 2
+                    cursor -= 1
+
+                else:
+                    cursor -= 1
+                    board[cursor][j] = tmp
+    return board
+
+def dfs(n, arr):
+    global ans
     if n == 5:
-        a = [max(i) for i in graph]
-        real_max = max(a)
-        if real_max > MAX:
-            MAX = real_max
+        for i in range(N):
+            for j in range(N):
+                if arr[i][j] > ans:
+                    ans = arr[i][j]
         return
-    for direction in directions:
-        temp = copy.deepcopy(graph)
-        direction()
-        dfs(n+1)
-        graph = temp
 
-dfs(0)
-print(MAX)
+    for i in range(4):
+        copy_arr = copy.deepcopy(arr)
+        if i == 0:
+            dfs(n + 1, left(copy_arr))
+        elif i == 1:
+            dfs(n + 1, right(copy_arr))
+        elif i == 2:
+            dfs(n + 1, up(copy_arr))
+        else:
+            dfs(n + 1, down(copy_arr))
+
+dfs(0, pan)
+print(ans)
