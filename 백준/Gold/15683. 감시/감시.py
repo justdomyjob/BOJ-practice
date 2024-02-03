@@ -31,7 +31,7 @@ def color(graph,i,j,k):
 
 MIN = 10**6
 for case in range(4**num_cctv):
-    copy_graph = copy.deepcopy(graph)
+    copy_graph = [arr[:] for arr in graph]
     for i,j,type in cctv:
         d = case % 4  # 방향
         case //= 4
