@@ -1,14 +1,22 @@
 def solution(money):
-    n = len(money)
-    dp1 = [0] * n
-    dp2 = [0] *n
+    def re(start,end): #첫집과 마지막집은 연결된게 아님
+        if dp[start][end]!=-1:
+            return dp[start][end]
+        elif start==end:
+            dp[start][end] = money[start]
+        elif start+1==end:
+            value = max(money[start], money[end])
+            dp[start][end] = value
+        else:
+            value1 = money[start] + re(start+2,end)
+            value2 = re(start+1,end)
+            value = max(value1,value2)
+            dp[start][end] = value
+        return dp[start][end]
+        
+    length = len(money)
+    dp = [[-1 for _ in range(length)] for _ in range(length)] 
+    a = re(1,length-1)
+    b = re(2,length-2) + money[0]
     
-    dp1[0] = money[0]
-    dp1[1] = max(money[0],money[1])
-    for i in range(2,n-1):
-        dp1[i] = max(dp1[i-2]+money[i],dp1[i-1])
-    dp2[1] = money[1]
-    for i in range(2,n):
-        dp2[i] =max(dp2[i-2] + money[i],dp2[i-1])
-    
-    return max(max(dp1),max(dp2))
+    return max(a,b)
