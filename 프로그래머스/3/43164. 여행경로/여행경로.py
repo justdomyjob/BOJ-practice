@@ -1,25 +1,19 @@
-from collections import deque
+import heapq
 def solution(tickets):
     edges = {}
     for start,end in tickets:
-        edges[start] = edges.get(start,deque())
-        edges[start].append(end)
-    
+        edges[start] = edges.get(start,[])
+        heapq.heappush(edges[start],end)
     ret = []
-    def dfs(start,n,orders):
+    def dfs(start):
         nonlocal ret
-        if n == len(tickets):
-            ret.append(orders[:])
-            return
-        else:
-            neighbors = edges.get(start,[])
-            for _ in range(len(neighbors)):
-                u = neighbors.popleft()
-                orders.append(u)
-                dfs(u,n+1,orders)
-                orders.pop()
-                neighbors.append(u)
-    dfs("ICN",0,["ICN"])
-    ret.sort()
-    # print(ret[0])
-    return ret[0]
+        ret.append(start)
+        neigh = edges.get(start,[])
+        if neigh:
+            u = heapq.heappop(neigh)
+            dfs(u)
+        return ret
+    ret = dfs("ICN")
+    print(ret)
+    
+    return ret
