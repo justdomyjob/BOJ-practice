@@ -1,23 +1,22 @@
-try : standard_input = open("input.txt", "r")  
-except:pass
+N,M = map(int,input().split())
+trees = list(map(int,input().split()))
 
-tree_n , tree_meter = map(int,input().split())
-tree_list = list(map(int,input().split()))
-
-left = 0
-right = max(tree_list)
-mid = (left+right)//2
-
-def get_tree(a):
-    sum = 0
-    for tree in tree_list:
-        if tree>= a:
-            sum+=(tree-a)
-    return sum
-while left+1 < right:
-    if get_tree(mid) < tree_meter:
-        right = mid
+def check(n):
+    count = 0
+    for tree in trees:
+        if tree >= n:
+            count+= (tree-n)
+    if count>=M:
+        return True
     else:
-        left = mid
-    mid = (left+right)//2
-print(mid)
+        return False
+
+low = 0
+end = max(trees)
+while low + 1 < end:
+    mid = (low+end)//2
+    if check(mid):
+        low = mid
+    else:
+        end = mid
+print(low)
