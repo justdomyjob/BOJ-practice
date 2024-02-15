@@ -85,6 +85,4 @@ def solution(n, build_frame):
             if graph[i][j] & B ==B:
                 ret.append((j,i,1))
     ret.sort()
-    # for g in graph[::-1]:
-    #     print(g)
     return ret
