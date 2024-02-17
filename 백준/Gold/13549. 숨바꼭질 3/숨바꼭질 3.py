@@ -1,25 +1,20 @@
-import heapq
-import sys
+from collections import deque
 
-N, K = map(int, sys.stdin.readline().rstrip().split())
-INF = 10**9
-distance_table = [INF for _ in range(100001)]
+n,m = map(int,input().split())
 
-
-def dijkstra(start,end):
-    q = []
-    heapq.heappush(q,(0,start))
-    distance_table[start] = 0
+visited = [-1 for _ in range(100001)]
+def bfs(start):
+    visited[start] = 0
+    q = deque()
+    q.append(start)
     while q:
-        distance, now = heapq.heappop(q)
-        if distance_table[now] < distance:
-            continue
-        for dis, neighbor in [(0,2*now),(1,now+1),(1,now-1)]:
-            if neighbor > 100000 or neighbor < 0:
-                continue
-            new_distance = dis + distance_table[now]
-            if new_distance < distance_table[neighbor]:
-                distance_table[neighbor] = new_distance
-                heapq.heappush(q,(new_distance, neighbor))
-    print(distance_table[end])
-dijkstra(N,K)
+        v = q.popleft()
+        for next in [v-1,v+1]:
+            if 0<=next<=100000 and (visited[next]==-1 or visited[next] > visited[v]+1):
+                visited[next] = visited[v] +1
+                q.append(next)
+        if 0<=2*v<=100000 and (visited[2*v]==-1 or visited[2*v] > visited[v]):
+            visited[2*v] = visited[v]
+            q.append(2*v)
+bfs(n)
+print(visited[m])
