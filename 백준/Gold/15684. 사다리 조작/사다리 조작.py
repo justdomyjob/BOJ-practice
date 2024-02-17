@@ -1,38 +1,61 @@
+N,M,H = map(int,input().split())
+
+graph = [[False for _ in range(N+1)] for _ in range(H+1)]
+for _ in range(M):
+    a,b = map(int,input().split())
+    graph[a][b] = True
+
+
+def check_sero(sero):
+    temp = sero
+    for h in range(1,H+1):
+        if graph[h][sero] == True:
+            sero+=1
+        elif sero>=2 and graph[h][sero-1] == True:
+            sero-=1
+    if temp==sero:
+        return True
+    else:
+        return False
+# def check():
+#     for sero in range(1,N+1):
+#         if not check_sero(sero):
+#             return False
+#     return True
+
 def check():
-    for i in range(n):
+    for i in range(1,N+1):
         k = i
-        for j in range(h):
-            if a[j][k]:
+        for j in range(1,H+1):
+            if graph[j][k]:
                 k += 1
-            elif k > 0 and a[j][k-1]:
+            elif k > 1 and graph[j][k-1]:
                 k -= 1
         if i != k:
             return False
     return True
 
-def dfs(cnt, x, y):
-    global ans
+minimum = 4
+def dfs(y,x,n):
+    global minimum
     if check():
-        ans = min(ans, cnt)
+        minimum = min(n,minimum)
         return
-    elif cnt == 3 or ans <= cnt:
+    elif n == 3 or minimum <= n:
         return
-    for i in range(x, h):
-        if i == x:
-            k = y
-        else:
-            k = 0
-        for j in range(k, n-1):
-            if not a[i][j] and not a[i][j+1] and (j == 0 or not a[i][j-1]):
-                a[i][j] = True
-                dfs(cnt+1, i, j+2)
-                a[i][j] = False
-
-n, m, h = map(int, input().split())
-a = [[False]*n for _ in range(h)]
-ans = 4
-for _ in range(m):
-    x, y = map(int, input().split())
-    a[x-1][y-1] = True
-dfs(0, 0, 0)
-print(ans if ans < 4 else -1)
+    else:
+        for i in range(y,H+1):
+            if i==y:
+                k= x
+            else:
+                k =1
+            for j in range(k,N):
+                if not graph[i][j] and not graph[i][j+1] and(j ==0 or not graph[i][j-1]):
+                    graph[i][j] = True
+                    dfs(i,j+2,n+1)
+                    graph[i][j] = False
+dfs(1,1,0)
+if minimum==4:
+    print(-1)
+else:
+    print(minimum)
