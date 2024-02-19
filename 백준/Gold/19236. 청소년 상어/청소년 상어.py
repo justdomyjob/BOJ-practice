@@ -17,10 +17,10 @@ def dfs(y,x,graph,count):
     fish, dir = graph[y][x]
     count+=fish
     graph[y][x] = (SHARK, dir)
+    answer = max(answer, count)
     for fish in range(1,17):
         move_fish(fish,graph)
 
-    finish = True
     for i in range(1,4):
         ny = y + steps[dir][0] *i
         nx = x + steps[dir][1] *i
@@ -28,13 +28,11 @@ def dfs(y,x,graph,count):
             temp_graph = copy.deepcopy(graph)
             temp_graph[y][x] = (DEAD, dir)
             dfs(ny,nx,temp_graph,count)
-            finish = False
         elif 0<=ny<4 and 0<=nx<4 and graph[ny][nx][0] == DEAD:
             continue
         else:
             break
-    if finish:
-        answer = max(answer,count)
+
 def move_fish(fish,graph):
     for y in range(4):
         for x in range(4):
@@ -48,12 +46,7 @@ def move_fish(fish,graph):
                         graph[ny][nx], graph[y][x] = graph[y][x], graph[ny][nx]
                         break
                 return
-def pp(graph):
-    global seq
-    for g in graph:
-        print(g)
-    seq+=1
-    print(seq)
+            
 answer = 0
 dfs(0,0,graph, 0)
 print(answer)
