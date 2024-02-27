@@ -1,38 +1,22 @@
-from collections import deque
-
-
 def solution(stones, k):
-    q = deque() #index, 높이
-    array =[0 for _ in range(len(stones))]
-    for i,stone in enumerate(stones):
-        while q and q[-1][1] < stone:
-            (index, height) = q.pop()
-            array[index] = (height,i-index)
-        q.append((i,stone))
-    while q:
-        (index,height) = q.pop()
-        array[index] = (height, len(stones) - index)
+    l = 1
+    r = max(stones)
 
-    q2 = deque()  # index, 높이
-    array2 = [0 for _ in range(len(stones))]
-    for i,stone in enumerate(stones[::-1]):
-        while q2 and q2[-1][1] < stone:
-            (index, height) = q2.pop()
-            array2[index] = (height,i-index)
-        q2.append((i,stone))
+    res = 1
+    while l <= r:
+        mid = (l + r) // 2  # 건너는 친구 수 
+        # mid명 건넌다고 가정했을 때 연속 점프수 -> k 초과 시 건너기 불가능하다고 판단하고 break
+        cnt = 0  
+        for stone in stones:
+            if stone - mid < 0:
+                cnt += 1
+                if cnt >= k:
+                    r = mid - 1  # 건널 수 없음 -> 건널 사람 줄이기
+                    break
+            else:
+                cnt = 0        
+        else:  # break없이 loop 무사 탈출 -> mid명 건널 수 있음 -> 건널 사람 늘리기
+            res = mid
+            l = mid + 1
 
-    while q2:
-        (index,height) = q2.pop()
-        array2[index] = (height, len(stones) - index)
-    array2 = array2[::-1]
-
-    array3 = [(a[0],a[1]+b[1]-1) for a,b in zip(array,array2)]
-    minimum = 10**9
-    for height,length in array3:
-        if length>=k:
-            minimum = min(minimum,height)
-
-
-    return minimum
-
-# solution([2, 4, 5, 3, 2, 1, 4, 2, 5, 1],3)
+    return res
